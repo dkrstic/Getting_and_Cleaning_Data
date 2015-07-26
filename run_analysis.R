@@ -28,23 +28,22 @@ subject_data <- rbind(subject_train, subject_test)
 
 #Extracts only the measurements on the mean and standard deviation for each measurement
 features <- read.table("./data/UCI HAR Dataset/features.txt")
-Data <- grep("-(mean|std)\\(\\)", features[, 2])
-x_data <- x_data[, Data]
-names(x_data) <- features[Data, 2]
+measurements <- grep("-(mean|std)\\(\\)", features[, 2])
+x_data <- x_data[, measurements]
 
 #Uses descriptive activity names to name the activities in the data set
 activities <- read.table("./data/UCI HAR Dataset/activity_labels.txt")
 y_data[, 1] <- activities[y_data[, 1], 2]
-#correct column name
-names(y_data) <- "activity"
 
 #Appropriately labels the data set with descriptive variable names
+names(x_data) <- features[measurements, 2]
+names(y_data) <- "activity"
 names(subject_data) <- "subject"
-#bind all data in one data set
-new <- cbind(x_data, y_data, subject_data)
 
-#Create a second, independent tidy data set with the average of each variable
-#for each activity and each subject
+#Bind all data in one data set
+ds <- cbind(x_data, y_data, subject_data)
+
+#Creates a second, independent tidy data set with the average of each variable for each activity and each subject
 library(plyr)
-tidy <- ddply(new, .(subject, activity), function(x) colMeans(x[, 1:66]))
-write.table(tidy, file = "tidy_data.txt",row.name=FALSE)
+tidy_data <- ddply(ds, .(subject, activity), .fun=function(x) colMeans(x[, 1:length(measurements)]))
+write.table(tidy_data, file = "tidy_data.txt", row.name=FALSE)
