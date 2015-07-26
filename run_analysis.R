@@ -1,11 +1,10 @@
 #Download the file and put the file in the data folder
 fileUrl <- "http://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
-download.file(fileUrl,destfile="./data/Dataset.zip",method="auto")
+download.file(fileUrl, destfile="./data/Dataset.zip",method="auto")
 
 #Unzip the file
-unzip(zipfile="./data/Dataset.zip",exdir="./data")
+unzip(zipfile="./data/Dataset.zip", exdir="./data")
 
-#Read data from the files
 #Read the Activity files
 y_test <- read.table("./data/UCI HAR Dataset/test/y_test.txt")
 y_train <- read.table("./data/UCI HAR Dataset/train/y_train.txt")
@@ -30,7 +29,7 @@ x_ds <- x_ds[, measurements]
 
 #Uses descriptive activity names to name the activities in the data set
 activities <- read.table("./data/UCI HAR Dataset/activity_labels.txt")
-y_ds[, 1] <- activities[y_data[, 1], 2]
+y_ds[, 1] <- activities[y_ds[, 1], 2]
 
 #Appropriately labels the data set with descriptive variable names
 names(x_ds) <- features[measurements, 2]
